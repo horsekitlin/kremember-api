@@ -1,13 +1,9 @@
-/**
- * Login Manager
- *
- * **/
 import jwt from 'jwt-simple';
 import Promise from 'bluebird';
 import moment from 'moment';
 import ErrorManager from './ErrorManager';
 import _ from 'lodash';
-import config from '../config';
+import config from '../../config';
 import { Users } from '../models';
 
 class LoginBase{

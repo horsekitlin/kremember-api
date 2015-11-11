@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import _ from 'lodash';
 import Promise from 'bluebird';
-import config from '../config';
+import config from '../../config';
 import ErrorManager from './ErrorManager';
 
 export default class Collection{
