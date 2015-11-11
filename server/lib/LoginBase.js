@@ -2,27 +2,27 @@
  * Login Manager
  *
  * **/
-import jwt from "jwt-simple";
+import jwt from 'jwt-simple';
 import Promise from 'bluebird';
-import moment from "moment";
-import { Users } from "../models";
-import ErrorManager from "./ErrorManager";
-import _ from "lodash";
+import moment from 'moment';
+import ErrorManager from './ErrorManager';
+import _ from 'lodash';
+import config from '../config';
+import { Users } from '../models';
 
 class LoginBase{
-    constructor(secrcykey="fjsdfhksahfkshfjdskfwidjfakldjfakjfkasjdfkjaslehodfhdasi", options = {}){
+    constructor(secrcykey='abcd1234', options = {}){
         this._secrcykey = secrcykey;
     }
     getFreshToken(data){
-        const json = _.pick(data
-                ,"name", "created_time", "fb_id", "_id");
+        const json = _.pick(data, config.login.token_fields);
         return jwt.encode(json, LoginManager._secrcykey);
     }
     decodeToken(token){
         try{
             return jwt.decode(token, LoginManager._secrcykey);
         }catch(err){
-            throw ErrorManager.TokenOverTimeError("解碼失敗");
+            throw ErrorManager.TokenOverTimeError('解碼失敗');
         }
     }
     checkPermision(req, res, next){
@@ -32,7 +32,7 @@ class LoginBase{
 
         if(_.isEmpty(token)
                 || _.isUndefined(token)){
-            req.error = ErrorManager.TokenOverTimeError("Token 不可為空");
+            req.error = ErrorManager.TokenOverTimeError('Token 不可為空');
             next();
         }else{
             try{
@@ -45,7 +45,7 @@ class LoginBase{
                 .showById(query._id)
                 .then((user) => {
                 if(_.isNull(user)){
-                    throw ErrorManager.NotFoundError("使用者不存在");
+                    throw ErrorManager.NotFoundError('使用者不存在');
                 }else{
                     req._login_required = user;
                     next();
@@ -57,7 +57,7 @@ class LoginBase{
     }
 }
 
-const LoginManager = new LoginBase();
+const LoginManager = new LoginBase(config.login.secrcykey);
 
 export default LoginManager;
 

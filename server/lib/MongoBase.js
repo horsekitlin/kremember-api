@@ -1,19 +1,22 @@
-import mongoose from "mongoose";
-import _ from "lodash";
-import Promise from "bluebird";
-import ErrorManager from "./ErrorManager";
+import mongoose from 'mongoose';
+import _ from 'lodash';
+import Promise from 'bluebird';
+import config from '../config';
+import ErrorManager from './ErrorManager';
 
 export default class Collection{
     constructor(name, schema){
         this.lib = mongoose;
-        this.db = mongoose.createConnection("mongodb://root:dyrotOt4om@apollo.modulusmongo.net:27017/wozaH8on?autoReconnect=true&connectTimeoutMS=60000");
-        //this.db = mongoose.createConnection("mongodb://127.0.0.1:27017/kremember");
+        this.db = mongoose.createConnection('mongodb://'
+                                            + config.server.host + ':'
+                                            + config.mongodb.port + '/'
+                                            + config.mongodb.dbname);
         schema.methods.reload = function(){
             return new Promise((resolve, reject) => {
                 this.model(name)
                 .findOne({_id : this._id}, (err, data) => {
                     if(err){
-                        reject(ErrorManager.GetDBSearchError("搜尋失敗"));
+                        reject(ErrorManager.GetDBSearchError('搜尋失敗'));
                     }else{
                         resolve(data);
                     }
@@ -24,7 +27,7 @@ export default class Collection{
             return new Promise((resolve, reject) => {
                 this.save((err) => {
                     if(err){
-                        reject(ErrorManager.GetDBUpdateError("修改失敗"));
+                        reject(ErrorManager.GetDBUpdateError('修改失敗'));
                     }else{
                         resolve();
                     }
@@ -51,7 +54,7 @@ export default class Collection{
             .save(function(err, data){
 
                 if(err){
-                    reject(ErrorManager.GetDBInsertError("資料庫寫入失敗"));
+                    reject(ErrorManager.GetDBInsertError('資料庫寫入失敗'));
                 }else{
                     resolve(data);
                 }
@@ -65,7 +68,7 @@ export default class Collection{
                 .findOne(query)
             .exec(function(err, data){
                 if(err){
-                    reject(ErrorManager.GetDBSearchError("搜尋失敗"));
+                    reject(ErrorManager.GetDBSearchError('搜尋失敗'));
                 }else{
                     resolve(data);
                 }
@@ -81,7 +84,7 @@ export default class Collection{
             .then(function(data){
                 resolve(data);
             }, function(err){
-                reject(ErrorManager.GetDBSearchError("搜尋失敗"));
+                reject(ErrorManager.GetDBSearchError('搜尋失敗'));
             });
         }.bind(this));
     }
@@ -95,7 +98,7 @@ export default class Collection{
                 options)
             .exec(function(err, data){
                 if(err){
-                    reject(ErrorManager.GetDBUpdateError("修改失敗"));
+                    reject(ErrorManager.GetDBUpdateError('修改失敗'));
                 }else{
                     resolve();
                 }
@@ -103,14 +106,14 @@ export default class Collection{
         }.bind(this));
     }
 
-    listAll(query = {}, sort="-created_time", options){
+    listAll(query = {}, sort='-created_time', options){
         return new Promise(function(resolve, reject){
             this.model
             .find(query)
             .sort(sort)
             .exec(function(err, data){
                 if(err){
-                    reject(ErrorManager.GetDBSearchError("搜尋失敗"));
+                    reject(ErrorManager.GetDBSearchError('搜尋失敗'));
                 }else{
                     if(_.isUndefined(options)){
                         var content = data;
@@ -125,7 +128,7 @@ export default class Collection{
             });
         }.bind(this));
     }
-    list(query={}, sort="-created_time", select="_id created_time", options){
+    list(query={}, sort='-created_time', select='_id created_time', options){
         return new Promise(function(resolve, reject){
             this.model
             .find(query)
@@ -133,7 +136,7 @@ export default class Collection{
             .sort(sort)
             .exec(function(err, data){
                 if(err){
-                    reject(ErrorManager.GetDBSearchError("搜尋失敗"));
+                    reject(ErrorManager.GetDBSearchError('搜尋失敗'));
                 }else{
                     if(_.isUndefined(options)){
                         var content = data;
@@ -153,7 +156,7 @@ export default class Collection{
             this.model
             .remove(query, (err) => {
                 if(err){
-                    reject(ErrorManager.GetDBDeleteError("刪除失敗"));
+                    reject(ErrorManager.GetDBDeleteError('刪除失敗'));
                 }else{
                     resolve();
                 }
@@ -167,7 +170,7 @@ export default class Collection{
             .then(function(){
                 resolve();
             }, function(err){
-                reject(ErrorManager.GetDBDeleteError("刪除失敗"));
+                reject(ErrorManager.GetDBDeleteError('刪除失敗'));
             });
 
         }.bind(this));
