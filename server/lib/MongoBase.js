@@ -175,12 +175,10 @@ export default class Collection{
 
         }.bind(this));
     }
-
     commit(query){
-        return new Promise((resolve, reject) => {
-            return this.model(query)
+         return new Promise((resolve, reject) => {
+            this.model(query)
             .save((err, data) => {
-                console.log(err);
                 if(err){
                     if(err.code === 11000){
                         const key = err.toJSON().errmsg.split('$')[1].split('_')[0];
