@@ -180,6 +180,7 @@ export default class Collection{
             this.model(query)
             .save((err, data) => {
                 if(err){
+                    console.log(err);
                     if(err.code === 11000){
                         const key = err.toJSON().errmsg.split('$')[1].split('_')[0];
                         reject(ErrorManager.GetDBInsertError(key + '已存在'));

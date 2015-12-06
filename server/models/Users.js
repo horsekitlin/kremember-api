@@ -7,6 +7,12 @@ class UsersClass extends Collection{
     }
 }
 let UserSchema = new Schema({
+    account : {
+        type : String
+    },
+    pwd : {
+        type : String
+    },
     group : {
         type : Number,
         enum : [0, 1, 2, 3, 4],
@@ -18,7 +24,6 @@ let UserSchema = new Schema({
     },
     fb_id : {
         type : String,
-        required : true
     },
     created_time : {
         type : Number,

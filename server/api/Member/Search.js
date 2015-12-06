@@ -6,7 +6,6 @@ export default {
         /**
         * **/
         const user = req._login_required;
-
         Member
         .listAll({"poster.uid" : user.id})
         .then((posts) => {
