@@ -1,0 +1,12 @@
+before_script:
+    - npm install
+stages:
+    - test
+job1:
+    stage: test
+    script:
+        - npm test
+    only:
+        - master
+    tags:
+        - gitlabdemo
