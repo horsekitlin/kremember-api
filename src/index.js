@@ -8,10 +8,6 @@ import users from './routes/users';
 
 var app = express();
 // @flow
-function bar(x: string, y: number): string {
-  return x.length * y;
-}
-console.log(bar('Hello', 42));
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
